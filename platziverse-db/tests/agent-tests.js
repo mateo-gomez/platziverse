@@ -141,5 +141,3 @@ test.serial('agent#findByUsername', async t => {
 
   t.true(AgentStub.findAll.called, 'findAll should be called on model')
 })
-
-luji
