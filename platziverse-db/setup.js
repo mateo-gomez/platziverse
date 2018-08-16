@@ -8,7 +8,6 @@ const db = require('./')
 const prompt = inquirer.createPromptModule()
 
 async function setup () {
-
   if (process.argv.pop() !== '--y') {
     const answer = await prompt([
       {
@@ -18,7 +17,7 @@ async function setup () {
       }
     ])
     if (!answer.setup) {
-      returnconsole.log(`${chalk.blue('Nothing happend :)')}`)
+      return console.log(`${chalk.blue('Nothing happend :)')}`)
     }
   }
 
@@ -30,24 +29,7 @@ async function setup () {
   //   }
   // ])
 
-  const config = {
-    database: process.env.DB_NAME || 'platziverse',
-    username: process.env.DB_USER || 'platzi',
-    password: process.env.DB_PASS || 'platzi',
-    host: process.env.DB_HOST || 'localhost',
-    dialect: 'postgres',
-    logging: s => debug(s),
-    setup: true
-    // operatorsAliases: {
-    //   $and: Op.and,
-    //   $or: Op.or,
-    //   $eq: Op.eq,
-    //   $gt: Op.gt,
-    //   $lt: Op.lt,
-    //   $lte: Op.lte,
-    //   $like: Op.like
-    // }
-  }
+  const config = require('./config-db')()
 
   await db(config).catch(handleFatalError)
 
