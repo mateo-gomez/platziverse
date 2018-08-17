@@ -1,7 +1,7 @@
 const debug = require('debug')('platziverse:db:setup')
 
 module.exports = function (init = true) {
-  const config = {
+  return {
     database: process.env.DB_NAME || 'platziverse',
     username: process.env.DB_USER || 'platzi',
     password: process.env.DB_PASS || 'platzi',
