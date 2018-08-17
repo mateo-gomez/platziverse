@@ -103,24 +103,22 @@ server.on('published', async (packet, client) => {
         }
 
         // Store Metrics
-          const saveMetricPromises = payload.metrics.map(async (metric) => {
-            let createdMetric
-
-            try {
-              createdMetric = await Metric.create(agent.uuid, metric)
-            } catch (e) {
-              return handleError(e)
-            }
-            debug(`Metric ${createdMetric.id} saved on agent ${agent.uuid}`)
-          })
+        const saveMetricPromises = payload.metrics.map(async (metric) => {
+          let createdMetric
 
           try {
-            await Promise.all(saveMetricPromises)
+            createdMetric = await Metric.create(agent.uuid, metric)
           } catch (e) {
             return handleError(e)
           }
+          debug(`Metric ${createdMetric.id} saved on agent ${agent.uuid}`)
+        })
 
-
+        try {
+          await Promise.all(saveMetricPromises)
+        } catch (e) {
+          return handleError(e)
+        }
 
         // for (let metric of payload.metrics) {
         //   let m
@@ -130,9 +128,7 @@ server.on('published', async (packet, client) => {
         //   } catch (e) {
         //     return handleError(e)
         //   }
-
-        }
-
+      }
 
       break
   }
