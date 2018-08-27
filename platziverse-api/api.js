@@ -1,9 +1,10 @@
 'use strict'
 
-const debug = require('debug')('platziverse:api.routes')
-const express = require('express');
-const db = require('platziverse-db');
+const debug = require('debug')('platziverse:api:routes')
+const express = require('express')
+
 const auth = require('express-jwt')
+const db = require('platziverse-db')
 
 const config = require('./config')
 
@@ -15,7 +16,7 @@ api.use('*', async (req, res, next) => {
   if (!services) {
     debug('Connecting to database')
     try {
-      services = await db(config)
+      services = await db(config.db)
     } catch (e) {
       return next(e)
     }
@@ -62,7 +63,7 @@ api.get('/agent/:uuid', async (req, res, next) => {
   }
 
   if (!agent) {
-    return next(new Error(`Agent not found with ${uuid}`))
+    return next(new Error(`Agent not found with uuid ${uuid}`))
   }
 
   res.send(agent)
@@ -91,6 +92,7 @@ api.get('/metrics/:uuid/:type', async (req, res, next) => {
   const { uuid, type } = req.params
 
   debug(`request to /metrics/${uuid}/${type}`)
+
   let metrics = []
   try {
     metrics = await Metric.findByTypeAgentUuid(type, uuid)
